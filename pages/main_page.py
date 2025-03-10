@@ -1,13 +1,24 @@
 from .base_page import BasePage
 from .locators import MainPageLocators
-from .login_page import LoginPage # 1/3 Первый способ перехода между страницами: сделать импорт страницы с логином
 
-# Класс MainPage - наследник класса BasePage (класс-предок указывается в скобках)
+
+"""Класс MainPage - наследник класса BasePage (класс-предок указывается в скобках)
+Метод __init__ вызывается при создании объекта. Конструктор ниже с ключевым словом super на самом деле только вызывает 
+конструктор класса предка и передаёт ему все те аргументы, которые мы передали в конструктор MainPage."""
+
 class MainPage(BasePage):
-    def go_to_login_page(self):
-        login_link = self.browser.find_element(*MainPageLocators.LOGIN_LINK) # символ * указывает на то, что мы передали кортеж(!) для распаковки
-        login_link.click()
-        # return LoginPage(browser=self.browser, url=self.browser.current_url) # 2/3 Первый способ перехода между страницами: возвращать нужный Page Object.
+    def __init__(self, *args, **kwargs):
+        super(MainPage, self).__init__(*args, **kwargs)
 
-    def should_be_login_link(self):
-        assert self.is_element_present(*MainPageLocators.LOGIN_LINK), "Login link is not presented"
+
+""" В данном курсе рассматривается питон версии 3. А в нем в инициализаторе нет смысла передавать имя класса и self, 
+если идет вызов родительного инита. Это же только для совместимости со вторым питоном. Или для переопределения mro. 
+Тут и этого нет. Так что надо или  super().__init__(*args, **kwargs)
+или просто такЖ
+class MainPage(BasePage):
+    pass
+ставить вместо инициализатора.
+ЗЫ: кстати, разве конструктор это не __new__?
+new - это конструктор класса. а init - его инициализатор.
+Если не указать new, то он будет всё-равно вызван перед инициаизатором.
+https://docs.python.org/3/reference/datamodel.html#object.__new__"""
