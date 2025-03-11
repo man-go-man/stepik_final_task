@@ -1,3 +1,6 @@
+import pytest
+
+from pages.basket_page import BasketPage
 from pages.login_page import LoginPage
 from pages.main_page import MainPage
 
@@ -15,3 +18,11 @@ def test_guest_should_see_login_link(browser):
     page = MainPage(browser, link)
     page.open()
     page.should_be_login_link()
+
+def test_guest_cant_see_product_in_basket_opened_from_main_page(browser):
+    page = MainPage(browser, link)
+    page.open()
+    page.go_to_basket()
+    basket_page = BasketPage(browser, browser.current_url) # страницу корзины инициализируем в теле теста
+    basket_page.should_not_see_any_items_in_basket() # Ожидаем, что в корзине нет товаров
+    basket_page.should_see_empty_basket_text() # Ожидаем, что есть текст о том что корзина пуста
